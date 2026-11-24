@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Delegate return",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"enum": ["pass", "fail", "blocked"]},
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {"type": "string"},
+          "change": {"type": "string"}
+        },
+        "required": ["path", "change"],
+        "additionalProperties": false
+      }
+    },
+    "deviations": {"type": "array", "items": {"type": "string"}},
+    "open_questions": {"type": "array", "items": {"type": "string"}}
+  },
+  "required": ["schema_version", "status", "artifacts", "deviations", "open_questions"],
+  "additionalProperties": false
+}

@@ -1,0 +1,8 @@
+{
+  "name": "roster",
+  "version": "0.1.0",
+  "author": {"name": "Tanner O'Rourke"},
+  "license": "MIT",
+  "homepage": "https://github.com/tannerorourke/toolkit",
+  "description": "Practice packs for a roster of agent roles: the experience core every project passes, its media, and the rules each practice follows, routed by one skill."
+}

@@ -1,0 +1,8 @@
+{
+  "name": "executor",
+  "version": "0.1.0",
+  "author": {"name": "Tanner O'Rourke"},
+  "license": "MIT",
+  "homepage": "https://github.com/tannerorourke/toolkit",
+  "description": "A project executor that compiles plans into contracted checkpoints, briefs cheap delegates, gates their work, and writes a trace at close."
+}

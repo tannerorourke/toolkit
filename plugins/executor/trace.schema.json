@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Run trace",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": 1},
+    "run_id": {"type": "string"},
+    "project": {"type": "string"},
+    "plan": {"type": "string"},
+    "opened": {"type": "string", "format": "date-time"},
+    "closed": {"type": "string", "format": "date-time"},
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {"type": "integer", "minimum": 1},
+          "title": {"type": "string"},
+          "outcome": {"enum": ["accepted", "rejected", "blocked", "abandoned"]},
+          "rework_count": {"type": "integer", "minimum": 0},
+          "gate_verdicts": {"type": "array", "items": {"enum": ["pass", "fail", "blocked"]}},
+          "verifier_failures": {"type": "integer", "minimum": 0},
+          "deviations": {"type": "array", "items": {"type": "string"}}
+        },
+        "required": ["number", "title", "outcome", "rework_count", "gate_verdicts", "verifier_failures", "deviations"],
+        "additionalProperties": false
+      }
+    },
+    "decisions": {"type": "array", "items": {"type": "string"}},
+    "contracts_reworked": {
+      "type": "object",
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "which": {"type": "array", "items": {"type": "integer", "minimum": 1}}
+      },
+      "required": ["count", "which"],
+      "additionalProperties": false
+    },
+    "verifier_failures": {"type": "integer", "minimum": 0},
+    "deviation_notes": {"type": "array", "items": {"type": "string"}},
+    "friction": {"type": "string", "maxLength": 1600}
+  },
+  "required": ["schema_version", "run_id", "project", "plan", "opened", "closed", "checkpoints", "decisions", "contracts_reworked", "verifier_failures", "deviation_notes", "friction"],
+  "additionalProperties": false
+}

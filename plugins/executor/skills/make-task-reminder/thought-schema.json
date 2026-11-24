@@ -1,0 +1,432 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://toolkit.local/schema/thought/v1",
+  "title": "Thought",
+  "description": "One captured thought. Produced by any input layer, enriched by the capture model, owned by the service. The markdown ledger line and the phone reminder are projections of this object.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "schema_version",
+    "captured_at",
+    "source",
+    "raw",
+    "text",
+    "category",
+    "surface",
+    "action",
+    "routing",
+    "state",
+    "events"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
+      "description": "ULID minted at capture by the input layer, or by the service when the layer cannot."
+    },
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layer"
+      ],
+      "properties": {
+        "layer": {
+          "enum": [
+            "claude-code",
+            "shortcut",
+            "chat",
+            "cowork",
+            "telegram",
+            "reminders-export",
+            "ledger",
+            "service"
+          ]
+        },
+        "device": {
+          "type": "string",
+          "description": "hostname or phone name"
+        },
+        "session": {
+          "type": "string",
+          "description": "Claude session id or repo path when captured mid-session"
+        }
+      }
+    },
+    "raw": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Verbatim utterance, spoken or typed. Never shown back. Kept by the service until the record has a type, then dropped; the ledger line remains the raw copy."
+    },
+    "text": {
+      "type": "string",
+      "maxLength": 140,
+      "description": "Shortest complete restatement, imperative mood. Names and places verbatim."
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 600,
+      "default": null,
+      "description": "The one field the capture model may write freely, bounded. For idea: two or three possible directions. For lookup: the one-line result. For an acted item: the briefing the service keeps. Otherwise null."
+    },
+    "category": {
+      "enum": [
+        "buy",
+        "do",
+        "schedule",
+        "idea",
+        "question",
+        "note"
+      ],
+      "description": "User-facing grouping. idea is project-directed; question is for Claude at the next session."
+    },
+    "lifecycle": {
+      "enum": [
+        "trigger",
+        "intention",
+        "directive",
+        "fact",
+        null
+      ],
+      "description": "Memory-schema type. Best effort at capture, final at consolidation."
+    },
+    "when": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+        },
+        "end": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "window": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 8601 duration for a bounded directive, e.g. P1M"
+        },
+        "as_said": {
+          "type": "string",
+          "description": "the phrase that produced the date, e.g. 'Thursday at 2'"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "where": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "A place the user has named once (a-friends-house, grocery). Never coordinates."
+        },
+        "on": {
+          "enum": [
+            "arrive",
+            "leave"
+          ],
+          "default": "arrive"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "repo name or project slug"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "people": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "names as said; informational only, nothing is ever sent to them"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "surface": {
+      "type": "object",
+      "description": "When the service should bring this back up. Evaluated deterministically; no model in the query.",
+      "additionalProperties": false,
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "on_cue",
+            "on_project_session",
+            "daily_digest",
+            "on_demand",
+            "never"
+          ],
+          "description": "on_cue: at when/where. on_project_session: when a session starts in project.slug. daily_digest: in the once-a-day open-loop set. on_demand: only when asked. never: fact or note kept for recall only."
+        },
+        "remind": {
+          "type": "boolean",
+          "default": false,
+          "description": "true means push outward, not just include in context"
+        },
+        "priority": {
+          "enum": [
+            "low",
+            "normal",
+            "high"
+          ],
+          "default": "normal"
+        },
+        "not_before": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "end of the grace window; after this the miss policy applies"
+        },
+        "snoozed_until": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "misses": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "times surfaced without a response; drives demotion"
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "description": "The deterministic thing the router did, if any. The model names the kind; the host chooses and runs the tool and reports the rest.",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "status"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "none",
+            "reminder",
+            "calendar",
+            "list",
+            "lookup"
+          ],
+          "description": "fixed set named by the router; the host maps it to a tool. calendar covers create and edit; lookup is one web search. Anything needing more inference sets routing.escalate instead."
+        },
+        "tool": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "the host's tool that applied the kind, e.g. ios.reminders, google.calendar, or an MCP tool name; set by the host, never by the model"
+        },
+        "args": {
+          "type": "object"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "done",
+            "failed",
+            "skipped"
+          ]
+        },
+        "external_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "id in the target system, for completion sync"
+        },
+        "at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "applied_by": {
+          "enum": [
+            "service",
+            "shortcut",
+            "skill",
+            null
+          ],
+          "description": "who executed it; a phone client applies phone-local actions the service could not"
+        }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "description": "How the record was classified. Every capture has this; it is the label a lifecycle classifier trains on.",
+      "additionalProperties": false,
+      "required": [
+        "stage"
+      ],
+      "properties": {
+        "stage": {
+          "enum": [
+            "rules",
+            "model",
+            "log"
+          ],
+          "description": "rules: deterministic match resolved it. model: the capture model routed or enriched it. log: nothing acted, stored for later."
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "id of the model that filled the schema when stage is model. Includes the session model when the Claude Code skill is the capture host; a classifier's training set is stratified by this field."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "escalate": {
+          "type": "boolean",
+          "default": false,
+          "description": "the model judged this needs a higher-class model or a tool outside the fixed set; logged and surfaced at the next session as runnable"
+        },
+        "input_truncated": {
+          "type": "boolean",
+          "default": false,
+          "description": "raw exceeded the capture-model input cap and was cut"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    },
+    "state": {
+      "enum": [
+        "open",
+        "snoozed",
+        "done",
+        "dropped",
+        "superseded"
+      ],
+      "description": "Derived by folding events. Never set directly."
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "id of the record this one replaced"
+    },
+    "events": {
+      "type": "array",
+      "description": "Append-only. Any surface may append; the service is the only writer of the array.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "at",
+          "kind",
+          "source"
+        ],
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "kind": {
+            "enum": [
+              "captured",
+              "typed",
+              "routed",
+              "surfaced",
+              "snoozed",
+              "done",
+              "dropped",
+              "superseded",
+              "edited"
+            ]
+          },
+          "source": {
+            "enum": [
+              "claude-code",
+              "shortcut",
+              "chat",
+              "cowork",
+              "telegram",
+              "reminders-export",
+              "ledger",
+              "service"
+            ]
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

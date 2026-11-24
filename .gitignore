@@ -1,0 +1,13 @@
+# Python caches, virtualenvs, and personal profiles.
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+profile.json
+!profile.example.json
+
+# Gate verdicts written beside the work.
+.executor/
+
+# Tests and validation data are kept out of version control.
+tests/

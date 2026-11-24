@@ -1,0 +1,19 @@
+{
+  "name": "toolkit",
+  "description": "Claude Code plugins for plan-driven project execution.",
+  "owner": {
+    "name": "Tanner O'Rourke"
+  },
+  "plugins": [
+    {
+      "name": "executor",
+      "source": "./plugins/executor",
+      "description": "Project executor that compiles plans into contracted checkpoints, briefs cheap delegates, gates their work, and writes a trace at close."
+    },
+    {
+      "name": "roster",
+      "source": "./plugins/roster",
+      "description": "Practice packs for a roster of agent roles: the experience core every project passes, its media, and the rules each practice follows."
+    }
+  ]
+}
