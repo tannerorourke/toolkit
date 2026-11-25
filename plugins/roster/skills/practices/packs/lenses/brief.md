@@ -1,5 +1,7 @@
 # Lens: brief
 
+How a senior engineer reads a work order before handing it to someone else.
+
 Judge whether a checkpoint contract can be built and checked from its text alone, before an implementer runs. A contract has four fields: Inputs, Deliverable, Acceptance, and Non-goals.
 
 The brief gives you the contract and the files its Inputs name. Skill: none.

@@ -1,5 +1,7 @@
 # Media
 
+How a product designer lists every surface a user meets a product through, before any of them is designed.
+
 When you are done, the experience core names every medium the product uses, and each named medium has a module of design units planned. A medium is a surface the user meets the product through. Name a medium only when the user meets the product there; a command-line tool with prose output uses `conversation` or `output`, never `gui`.
 
 | Medium | The user meets the product as | The module decides | Pack file |

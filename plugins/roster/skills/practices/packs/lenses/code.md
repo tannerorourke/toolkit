@@ -1,5 +1,7 @@
 # Lens: code
 
+How a second engineer reviews a change before it merges.
+
 Judge whether a change does what its contract says and breaks nothing it touches.
 
 The brief gives you the contract, the diff or the changed files, and the output of the checks the orchestrator ran (tests, linters, the gate's results). Read the surrounding code a changed line depends on. Skill: none.

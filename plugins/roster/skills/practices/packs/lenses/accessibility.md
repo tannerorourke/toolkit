@@ -1,5 +1,7 @@
 # Lens: accessibility
 
+How an accessibility specialist audits a page against WCAG 2.1 AA.
+
 Judge whether a page or prototype meets WCAG 2.1 AA, before it is shown for approval and again once built.
 
 The brief gives you the artifact as files: the prototype's HTML and CSS, or the built page's source, and a screenshot of each state. It may also give the output of a contrast or keyboard check the orchestrator ran.

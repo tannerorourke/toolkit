@@ -1,6 +1,6 @@
 # Lifecycle
 
-The design folder is `artifacts/design/` at the project's root unless the project names another. Every project moves through one flow, from its idea or its stopped state to an accepted checkpoint. This file names the two entries, the three gates, the role and lens at each step, and where a critic's findings are recorded. The practice packs it names come from the `roster:practices` skill when the roster plugin is installed; without it, run each step from this file.
+The design folder is `artifacts/design/` at the project's root unless the project names another. Every project moves through one flow, from its idea or its stopped state to an accepted checkpoint. This file names the two entries, the three gates, the role and lens at each step, and where a critic's findings are recorded. The practice packs it names come from the `roster:practices` skill when the roster plugin is installed; without it, run each step from this file. Name a pack to the user by the practice in its opening line, never by its pack name alone.
 
 ## Two entries
 

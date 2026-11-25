@@ -5,12 +5,13 @@ description: Route a practice (experience core, a medium such as gui, conversati
 
 # Practices
 
-When you are done, you hold the pack files for the practice in front of you, read in full or named by absolute path in a delegate's brief. A pack is a set of markdown files carrying a practice's procedure and rules. This skill routes to packs and holds no rules of its own.
+When you are done, you hold the pack files for the practice in front of you, read in full or named by absolute path in a delegate's brief. A pack is a set of markdown files carrying a practice's procedure and rules. Each pack file opens, under its title, with one plain line naming the human practice it borrows from. This skill routes to packs and holds no rules of its own.
 
 ## Critical
 
 - Resolve every pack path against this skill's folder, `${CLAUDE_SKILL_DIR}`. Hand a delegate the absolute path, never the relative one.
 - Read a pack file in full before acting on it. A pack is loaded every run, never summarized.
+- Name a pack to the user by the practice in its opening line, such as "the six questions a product designer answers before anything is drawn", never by its pack name or file name alone.
 - Run every pack inline when no subagent is available. A role agent is a context optimization, and the pack carries the whole procedure.
 
 ## Routing

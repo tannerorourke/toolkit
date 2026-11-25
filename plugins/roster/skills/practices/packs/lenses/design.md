@@ -1,5 +1,7 @@
 # Lens: design
 
+How a design lead critiques a mockup before the person who asked for it sees it.
+
 Judge whether a design unit's mockup or draft serves the experience core and its module's decisions.
 
 The brief gives you the project's approved `core/core.md` from its design folder, the unit's module decisions, and the artifact as files: artboard images, a prototype's HTML, a screenshot of each state, or for a non-screen medium the draft `handoff.md` and `sample.md`.
