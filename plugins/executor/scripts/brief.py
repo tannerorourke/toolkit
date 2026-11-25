@@ -7,7 +7,7 @@ Prints the brief on stdout: a header line naming plan, checkpoint, and working d
 (line numbers 1-based inclusive), and the return-block instruction with the schema
 inline. --verifier renders the contract plus the gate results and asks the verifier
 to judge only the not_run clauses. Token estimate on stderr (chars / 4). Exits 1 if
-the estimate exceeds 2000 or an Inputs path named by an `exists` clause is missing
+the estimate exceeds the profile's 'brief_token_budget' or an Inputs path named by an `exists` clause is missing
 under the working dir (stderr names each), 2 if the checkpoint does not exist.
 """
 import argparse
@@ -17,9 +17,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import toolkit_profile  # noqa: E402
 from contract_check import FIELDS, parse, split_clauses  # noqa: E402
 
-LIMIT = 2000
 SCHEMA = Path(__file__).resolve().parent.parent / "return.schema.json"
 HEADER = re.compile(r"<!-- executor-brief (\{.*?\}) -->")
 EXISTS = re.compile(r"^`([^`$][^`]*)` exists$")
@@ -117,7 +117,7 @@ def main() -> int:
     tokens = len(brief) // 4
     print(brief, end="")
     print(f"estimated tokens: {tokens} (chars/4)", file=sys.stderr)
-    return 1 if tokens > LIMIT else 0
+    return 1 if tokens > toolkit_profile.get("brief_token_budget") else 0
 
 
 if __name__ == "__main__":

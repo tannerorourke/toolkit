@@ -16,5 +16,7 @@
     "npm test",
     "make test"
   ],
-  "agent_bash_allow": {}
+  "agent_bash_allow": {},
+  "agent_models": {},
+  "brief_token_budget": 2000
 }

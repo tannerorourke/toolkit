@@ -18,8 +18,8 @@ Which role and lens runs at each step, the three gates, and where a critic's fin
 python3 ${CLAUDE_PLUGIN_ROOT}/scripts/brief.py <plan>.md <N> [--cwd DIR] [--excerpt PATH[:START-END] ...]
 ```
 
-   Name only the excerpts the delegate needs; each is inlined, nothing else is. The estimate prints on stderr. Exit 1 means it is over 2000 tokens: trim the excerpts or split the checkpoint. The first line is a header comment naming plan, checkpoint, and working dir (default: the current dir); keep it, the gate hook reads it. For the verifier, the verify skill renders the brief with `--verifier`.
-3. Dispatch with the Agent tool, `subagent_type` set to the chosen agent, the rendered brief as the whole prompt.
+   Name only the excerpts the delegate needs; each is inlined, nothing else is. The estimate prints on stderr. Exit 1 means it is over the profile's `brief_token_budget` (2000 by default): trim the excerpts or split the checkpoint. The first line is a header comment naming plan, checkpoint, and working dir (default: the current dir); keep it, the gate hook reads it. For the verifier, the verify skill renders the brief with `--verifier`.
+3. Dispatch with the Agent tool, `subagent_type` set to the chosen agent, the rendered brief as the whole prompt. If the profile's `agent_models` maps the chosen role (`surveyor`, `implementer`, `verifier`, `critic`, `designer`) to a model (`python3 ${CLAUDE_PLUGIN_ROOT}/scripts/toolkit_profile.py agent_models`), pass it as `model` on the Agent call; otherwise omit `model` and the agent's frontmatter decides.
 4. Read the one fenced json block at the end of the reply. `status` is the delegate's claim, never the verdict. For an implementer, follow the verify skill.
 5. On `status: blocked`, run no gate and no verifier. Read `open_questions`: answer from the plan if the answer is already there, else ask the human. Then amend the checkpoint (contract skill) or the excerpts, and re-dispatch with a fresh brief. Never answer by forwarding conversation.
 

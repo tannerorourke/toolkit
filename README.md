@@ -35,7 +35,7 @@ A project holds any number of plan files. Each plan holds checkpoints, and each 
 | Skill | Does |
 |---|---|
 | `executor:contract` | writes and upgrades checkpoints; `scripts/contract_check.py <plan>.md` checks them |
-| `executor:brief` | renders one checkpoint into a delegate brief (`scripts/brief.py`, under 2,000 tokens) |
+| `executor:brief` | renders one checkpoint into a delegate brief (`scripts/brief.py`, under the profile's token budget, 2,000 by default) |
 | `executor:verify` | runs the gate first (`scripts/gate.py`, on the implementer's SubagentStop), then the `verifier` agent on the clauses the gate could not run |
 | `executor:close` | writes the run's trace to `<traces_dir>/<project>/<run_id>.json` (`scripts/close.py`) |
 | `executor:make-task-reminder` | captures a passing thought as one ledger line (`scripts/thoughts.py`) |
@@ -57,7 +57,7 @@ None of them can spawn another agent.
 
 ## Profile
 
-The profile holds machine-specific values: the trace directory, the thought ledger, the test commands a verifier may run, and `engine_url`, a reserved key for a memory service's address that no script reads (`null` by default). The real copy lives at `~/.claude/toolkit/profile.json`; set `TOOLKIT_PROFILE` to use another path. Any missing key falls back to `plugins/executor/profile.example.json`.
+The profile holds machine-specific values: the trace directory, the thought ledger, the test commands a verifier may run, the brief's token budget, a model per agent role that overrides the table above, and `engine_url`, a reserved key for a memory service's address that no script reads (`null` by default). The real copy lives at `~/.claude/toolkit/profile.json`; set `TOOLKIT_PROFILE` to use another path. Any missing key falls back to `plugins/executor/profile.example.json`.
 
 ```
 python3 plugins/executor/scripts/toolkit_profile.py            # whole resolved profile

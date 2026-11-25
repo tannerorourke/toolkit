@@ -6,6 +6,8 @@ The brief gives you the artifact as files: the prototype's HTML and CSS, or the 
 
 Skill: invoke `design:accessibility-review` on the files the brief names, and fold its output into findings.
 
+If that skill is absent, apply the rubric below alone.
+
 ## Rubric
 
 | Check | Fails when | Severity |

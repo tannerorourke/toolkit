@@ -6,6 +6,8 @@ The brief gives you the project's approved `core/core.md` from its design folder
 
 Skill: invoke `design:design-critique` on each artboard or draft file the brief names, and fold its output into findings.
 
+If that skill is absent, apply the rubric below alone.
+
 ## Rubric
 
 | Check | Fails when | Severity |
